@@ -8,5 +8,11 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "css-parse": "^2.0.0",
+    "cssbeautify": "^0.3.1",
+    "sparkly": "^3.1.2",
+    "specificity": "^0.1.5"
+  }
 }
