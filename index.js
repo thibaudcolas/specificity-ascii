@@ -96,6 +96,16 @@ var blessed = require('blessed')
 screen.append(line) //must append before setting data
 line.setData(data)
 
+// var spark = contrib.sparkline(
+//      { label: 'Throughput (bits/sec)'
+//      , tags: true
+//      , style: { fg: 'blue' }})
+
+// screen.append(spark);
+// spark.setData(
+// [ 'Sparkline1'],
+// [ specificities ])
+
 screen.key(['escape', 'q', 'C-c'], function(ch, key) {
   return process.exit(0);
 });
