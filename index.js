@@ -62,8 +62,6 @@ var testStylesheet = fs.readFileSync('./examples/test.min.css', 'utf-8');
 
 var result = generateCssData(testStylesheet);
 var specificities = result.map(function(r) { return r.specificity; });
-var specificities80 = specificities.slice(0, 80);
 
-
-console.log('specificities80\n', sparkly(specificities80, {style: 'fire', min: 0}));
-console.log('specificities\n', sparkly(specificities, {style: 'fire', min: 0}));
+console.log('specificities80\n', sparkly(specificities.slice(0, 80), { style: 'fire' }));
+console.log('specificities\n', sparkly(specificities, { style: 'fire' }));
