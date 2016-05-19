@@ -64,4 +64,43 @@ var result = generateCssData(testStylesheet);
 var specificities = result.map(function(r) { return r.specificity; });
 
 console.log('specificities80\n', sparkly(specificities.slice(0, 80), { style: 'fire' }));
-console.log('specificities\n', sparkly(specificities, { style: 'fire' }));
+//console.log('specificities\n', sparkly(specificities, { style: 'fire' }));
+
+
+var blessed = require('blessed')
+, contrib = require('blessed-contrib')
+, screen = blessed.screen()
+, line = contrib.line(
+   {
+    width: 80,
+   height: 8,
+   smartCSR: true,
+   //, left: 0
+   //, top: 0
+   //, xPadding: 0
+   //, label: 'Title'
+   numYLabels: 3,
+   //, wholeNumbersOnly: true
+   })
+
+, data = [ { title: 'us-east',
+             x: specificities.map(function (s, i) { return i; }),
+             y: specificities,
+             style: {
+              line: 'red'
+             }
+           }
+        ]
+
+
+screen.append(line) //must append before setting data
+line.setData(data)
+
+screen.key(['escape', 'q', 'C-c'], function(ch, key) {
+  return process.exit(0);
+});
+
+screen.render()
+var screenshot = screen.screenshot();
+screen.destroy();
+console.log(screenshot);
