@@ -106,11 +106,7 @@ line.setData(data)
 // [ 'Sparkline1'],
 // [ specificities ])
 
-screen.key(['escape', 'q', 'C-c'], function(ch, key) {
-  return process.exit(0);
-});
-
-screen.render()
-var screenshot = screen.screenshot();
+screen.render();
+var screenshot = line.screenshot();
 screen.destroy();
 console.log(screenshot);
