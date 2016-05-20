@@ -1,9 +1,15 @@
 'use strict';
 
+var fs = require('fs');
 var specificity = require('specificity');
-var sparkly = require('sparkly');
 var cssParse = require('css-parse');
 var unminify = require('cssbeautify');
+var sparkly = require('sparkly');
+var blessed = require('blessed');
+var contrib = require('blessed-contrib');
+
+var isBig = false;
+var CHART_HEIGHT = isBig ? 20 : 3;
 
 // https://github.com/pocketjoso/specificity-graph/blob/master/lib/generateCssData.js#L8
 var specSum = function(selector){
@@ -57,63 +63,42 @@ var generateCssData = function(origCss) {
 
 };
 
-var fs = require('fs');
 var testStylesheet = fs.readFileSync('./examples/test.min.css', 'utf-8');
 
 var result = generateCssData(testStylesheet);
 var specificities = result.map(function(r) { return r.specificity; });
 
-console.log('specificities80\n', sparkly(specificities.slice(0, 80), { style: 'fire' }));
-//console.log('specificities\n', sparkly(specificities, { style: 'fire' }));
-
-
-var blessed = require('blessed')
-, contrib = require('blessed-contrib')
-, screen = blessed.screen({
+var screen = blessed.screen({
     smartCSR: true,
-})
-, line = contrib.line(
-   {
+});
+
+var line = contrib.line({
     left: 0,
     top: 0,
     //width: 80,
-   height: 8,
-   showLegend: false,
-   //, left 0
-   //, top: 0
-   //, xPadding: 0
-   //, label: 'Title'
-   numYLabels: 3,
-   //, wholeNumbersOnly: true
-   style: {
-    baseline: 'black',
-   },
+    height: CHART_HEIGHT + 5,
+    showLegend: false,
+    xPadding: 0,
+    label: 'Specificity in main.css',
+    numYLabels: isBig ? 7 : CHART_HEIGHT,
+    wholeNumbersOnly: true,
+    style: {
+        baseline: 'green',
+        line: 'red',
+    },
     data: [
         {
-            title: '',
             x: specificities.map(function (s, i) { return i; }),
             y: specificities,
-            style: {
-                line: 'red'
-            }
         }
     ],
 });
 
-screen.append(line) //must append before setting data
-//line.setData(data)
-
-// var spark = contrib.sparkline(
-//      { label: 'Throughput (bits/sec)'
-//      , tags: true
-//      , style: { fg: 'blue' }})
-
-// screen.append(spark);
-// spark.setData(
-// [ 'Sparkline1'],
-// [ specificities ])
-
+screen.append(line);
 screen.render();
+
 var screenshot = line.screenshot(null, null, null, null);
+
 screen.destroy();
-process.stdout.write(screenshot.split('\n').slice(0, 3).join('\n'));
+
+process.stdout.write(screenshot.split('\n').slice(0, CHART_HEIGHT).join('\n'));
