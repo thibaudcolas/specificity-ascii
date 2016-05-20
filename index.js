@@ -8,7 +8,7 @@ var sparkly = require('sparkly');
 var blessed = require('blessed');
 var contrib = require('blessed-contrib');
 
-var isBig = false;
+var isBig = true;
 var CHART_HEIGHT = isBig ? 20 : 3;
 
 // https://github.com/pocketjoso/specificity-graph/blob/master/lib/generateCssData.js#L8
@@ -79,6 +79,8 @@ var line = contrib.line({
     height: CHART_HEIGHT + 5,
     showLegend: false,
     xPadding: 0,
+    // TODO Assess whether this is a good idea, as the label will truncate
+    // the parts of the chart that go under it.
     label: 'Specificity in main.css',
     numYLabels: isBig ? 7 : CHART_HEIGHT,
     wholeNumbersOnly: true,
@@ -101,4 +103,6 @@ var screenshot = line.screenshot(null, null, null, null);
 
 screen.destroy();
 
-process.stdout.write(screenshot.split('\n').slice(0, CHART_HEIGHT).join('\n'));
+var chart = screenshot.split('\n').slice(0, CHART_HEIGHT + isBig ? 1 : 0).join('\n');
+
+process.stdout.write(chart);
