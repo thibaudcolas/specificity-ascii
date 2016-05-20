@@ -69,32 +69,39 @@ console.log('specificities80\n', sparkly(specificities.slice(0, 80), { style: 'f
 
 var blessed = require('blessed')
 , contrib = require('blessed-contrib')
-, screen = blessed.screen()
+, screen = blessed.screen({
+    smartCSR: true,
+})
 , line = contrib.line(
    {
-    width: 80,
+    left: 0,
+    top: 0,
+    //width: 80,
    height: 8,
-   smartCSR: true,
-   //, left: 0
+   showLegend: false,
+   //, left 0
    //, top: 0
    //, xPadding: 0
    //, label: 'Title'
    numYLabels: 3,
    //, wholeNumbersOnly: true
-   })
-
-, data = [ { title: 'us-east',
-             x: specificities.map(function (s, i) { return i; }),
-             y: specificities,
-             style: {
-              line: 'red'
-             }
-           }
-        ]
-
+   style: {
+    baseline: 'black',
+   },
+    data: [
+        {
+            title: '',
+            x: specificities.map(function (s, i) { return i; }),
+            y: specificities,
+            style: {
+                line: 'red'
+            }
+        }
+    ],
+});
 
 screen.append(line) //must append before setting data
-line.setData(data)
+//line.setData(data)
 
 // var spark = contrib.sparkline(
 //      { label: 'Throughput (bits/sec)'
@@ -107,6 +114,6 @@ line.setData(data)
 // [ specificities ])
 
 screen.render();
-var screenshot = line.screenshot();
+var screenshot = line.screenshot(null, null, null, null);
 screen.destroy();
-console.log(screenshot);
+process.stdout.write(screenshot.split('\n').slice(0, 3).join('\n'));
