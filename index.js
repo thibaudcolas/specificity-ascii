@@ -9,6 +9,6 @@ const CHART_HEIGHT = isBig ? 20 : 3;
 const testStylesheet = fs.readFileSync('./examples/test.min.css', 'utf-8');
 
 const result = generateCssData(testStylesheet);
-const specificities = result.map(function(r) { return r.specificity; });
+const specificities = result.map(r => r.specificity);
 
-console.log(renderChart(CHART_HEIGHT, isBig, specificities));
+process.stdout.write(renderChart(CHART_HEIGHT, isBig, specificities));
