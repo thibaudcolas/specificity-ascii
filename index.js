@@ -1,14 +1,12 @@
-import fs from 'fs';
 import { generateCssData } from './lib/calculations';
 import { renderChart } from './lib/chart';
 
-const isBig = false;
-const CHART_HEIGHT = isBig ? 20 : 3;
+export default (rawCSS) => {
+  const isBig = false;
+  const CHART_HEIGHT = isBig ? 20 : 3;
 
+  const result = generateCssData(rawCSS);
+  const specificities = result.map(r => r.specificity);
 
-const testStylesheet = fs.readFileSync('./examples/test.min.css', 'utf-8');
-
-const result = generateCssData(testStylesheet);
-const specificities = result.map(r => r.specificity);
-
-process.stdout.write(renderChart(CHART_HEIGHT, isBig, specificities));
+  return renderChart(CHART_HEIGHT, isBig, specificities);
+};
